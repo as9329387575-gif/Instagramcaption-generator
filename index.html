@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- SEO Meta Tags -->
+    <title>AI Instagram Caption Generator – Free, Fast & Viral Captions</title>
+    <meta name="description" content="Generate 5 unique, viral Instagram captions instantly with our free AI tool. Perfect for posts, reels, and stories. No login required.">
+    <meta name="keywords" content="instagram caption generator, ai instagram captions, free caption generator, viral instagram captions, instagram reels captions">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- Design & Functionality -->
+    <style>
+        :root {
+            --ig-gradient: linear-gradient(45deg, #833AB4, #E1306C, #F77737);
+            --light-bg: #fafafa;
+            --light-card: #ffffff;
+            --dark-bg: #121212;
+            --dark-card: #1e1e1e;
+            --text-light: #262626;
+            --text-dark: #f5f5f5;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            --shadow-strong: 0 8px 30px rgba(225, 48, 108, 0.15);
+            --radius: 16px;
+            --radius-sm: 10px;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            transition: background-color 0.3s ease;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            line-height: 1.6;
+            background-color: var(--light-bg);
+            color: var(--text-light);
+            padding: 0 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        body.dark-theme {
+            background-color: var(--dark-bg);
+            color: var(--text-dark);
+        }
+        /* Header */
+        header {
+            text-align: center;
+            padding: 40px 0 30px;
+            border-bottom: 1px solid #eee;
+        }
+        body.dark-theme header {
+            border-color: #333;
+        }
+        .logo {
+            font-weight: 800;
+            font-size: 2.8rem;
+            background: var(--ig-gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 10px;
+            line-height: 1;
+        }
+        .tagline {
+            font-size: 1.1rem;
+            color: #888;
+            margin-bottom: 20px;
+        }
+        /* Controls */
+        .controls {
+            background: var(--light-card);
+            padding: 30px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            margin: 30px auto;
+            max-width: 800px;
+        }
+        body.dark-theme .controls {
+            background: var(--dark-card);
+        }
+        .form-group {
+            margin-bottom: 25px;
+        }
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+        textarea, select {
+            width: 100%;
+            padding: 16px;
+            border: 2px solid #ddd;
+            border-radius: var(--radius-sm);
+            font-size: 1rem;
+            font-family: inherit;
+            background-color: var(--light-card);
+            color: inherit;
+        }
+        body.dark-theme textarea,
+        body.dark-theme select {
+            border-color: #444;
+            background-color: #2a2a2a;
+        }
+        textarea:focus, select:focus {
+            outline: none;
+            border-color: #E1306C;
+        }
+        textarea {
+            min-height: 140px;
+            resize: vertical;
+        }
+        .btn-generate {
+            width: 100%;
+            padding: 18px;
+            background: var(--ig-gradient);
+            color: white;
+            border: none;
+            border-radius: var(--radius-sm);
+            font-size: 1.2rem;
+            font-weight: 700;
+            cursor: pointer;
+            letter-spacing: 0.5px;
+            box-shadow: var(--shadow-strong);
+        }
+        .btn-generate:hover {
+            opacity: 0.95;
+            transform: translateY(-2px);
+        }
+        .btn-generate:active {
+            transform: translateY(0);
+        }
+        /* Results */
+        .results-section {
+            margin: 40px 0;
+        }
+        .section-title {
+            font-size: 1.8rem;
+            margin-bottom: 25px;
+            text-align: center;
+            color: inherit;
+        }
+        .captions-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 25px;
+        }
+        @media (min-width: 768px) {
+            .captions-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        @media (min-width: 1024px) {
+            .captions-container {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+        .caption-card {
+            background: var(--light-card);
+            border-radius: var(--radius);
+            padding: 25px;
+            box-shadow: var(--shadow);
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.6s ease forwards;
+            border-top: 5px solid;
+            border-image: var(--ig-gradient);
+            border-image-slice: 1;
+        }
+        body.dark-theme .caption-card {
+            background: var(--dark-card);
+        }
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .caption-text {
+            font-size: 1.1rem;
+            line-height: 1.7;
+            margin-bottom: 20px;
+            white-space: pre-line;
+        }
+        .btn-copy {
+            background: #f0f0f0;
+            color: #333;
+            border: none;
+            border-radius: 50px;
+            padding: 10px 22px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+        }
+        body.dark-theme .btn-copy {
+            background: #333;
+            color: #f0f0f0;
+        }
+        .btn-copy:hover {
+            background: #e0e0e0;
+        }
+        body.dark-theme .btn-copy:hover {
+            background: #444;
+        }
+        .btn-copy.copied {
+            background: #4CAF50;
+            color: white;
+        }
+        /* SEO Content */
+        .seo-content {
+            max-width: 800px;
+            margin: 60px auto;
+            color: #555;
+        }
+        body.dark-theme .seo-content {
+            color: #ccc;
+        }
+        .seo-content h2, .seo-content h3 {
+            margin: 25px 0 15px;
+            color: inherit;
+        }
+        .seo-content p {
+            margin-bottom: 18px;
+        }
+        .faq {
+            background: var(--light-card);
+            padding: 30px;
+            border-radius: var(--radius);
+            margin-top: 40px;
+        }
+        body.dark-theme .faq {
+            background: var(--dark-card);
+        }
+        .faq-item {
+            margin-bottom: 25px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 20px;
+        }
+        body.dark-theme .faq-item {
+            border-color: #333;
+        }
+        .faq-item h3 {
+            color: #E1306C;
+        }
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 40px 0;
+            margin-top: 40px;
+            border-top: 1px solid #eee;
+            color: #888;
+            font-size: 0.9rem;
+        }
+        body.dark-theme footer {
+            border-color: #333;
+        }
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--light-card);
+            border: 2px solid #ddd;
+            border-radius: 50px;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-weight: 600;
+            box-shadow: var(--shadow);
+        }
+        body.dark-theme .theme-toggle {
+            background: var(--dark-card);
+            border-color: #444;
+            color: var(--text-dark);
+        }
+        /* Ads placeholder */
+        .ad-placeholder {
+            height: 100px;
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+            border-radius: var(--radius-sm);
+            margin: 30px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #999;
+            font-weight: 600;
+        }
+        body.dark-theme .ad-placeholder {
+            background: linear-gradient(90deg, #2a2a2a 25%, #333 50%, #2a2a2a 75%);
+            color: #666;
+        }
+        @keyframes loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: #E1306C;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <button class="theme-toggle" id="themeToggle">🌙 Dark</button>
+
+    <header>
+        <h1 class="logo">AI Caption Generator</h1>
+        <p class="tagline">Free, Fast & Viral Instagram Captions</p>
+    </header>
+
+    <main>
+        <!-- Ad placeholder -->
+        <div class="ad-placeholder">Advertisement Space (728x90)</div>
+
+        <!-- Generator Tool -->
+        <section class="controls">
+            <div class="form-group">
+                <label for="postDescription">Describe your post or photo</label>
+                <textarea id="postDescription" placeholder="e.g., A beautiful sunset at the beach with friends, feeling grateful...">A beautiful sunset at the beach with friends, feeling grateful...</textarea>
+            </div>
+            <div class="form-group">
+                <label for="tone">Caption Tone</label>
+                <select id="tone">
+                    <option value="funny">Funny 😂</option>
+                    <option value="motivational">Motivational 💪</option>
+                    <option value="romantic">Romantic ❤️</option>
+                    <option value="professional">Professional 👔</option>
+                    <option value="attitude">Attitude 😎</option>
+                    <option value="viral" selected>Viral 🔥</option>
+                    <option value="business">Business 📈</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="length">Caption Length</label>
+                <select id="length">
+                    <option value="short">Short (1 line)</option>
+                    <option value="medium" selected>Medium (2-3 lines)</option>
+                    <option value="long">Long (Paragraph)</option>
+                </select>
+            </div>
+            <button class="btn-generate" id="generateBtn">Generate 5 Captions</button>
+        </section>
+
+        <!-- Results -->
+        <section class="results-section" id="resultsSection" style="display: none;">
+            <h2 class="section-title">Your Custom Instagram Captions</h2>
+            <div class="captions-container" id="captionsContainer">
+                <!-- Generated captions appear here -->
+            </div>
+        </section>
+
+        <!-- Ad placeholder -->
+        <div class="ad-placeholder">Advertisement Space (300x250)</div>
+
+        <!-- SEO Content -->
+        <section class="seo-content">
+            <h2>Free AI Instagram Caption Generator for Viral Posts</h2>
+            <p>Our <strong>AI Instagram Caption Generator</strong> is the ultimate tool for content creators, influencers, and businesses looking to enhance their social media presence. By leveraging intelligent algorithms, this free tool creates unique, engaging, and platform-optimized captions in seconds. Whether you're posting a selfie, a product shot, a travel photo, or a Reel, you'll get <strong>viral Instagram captions</strong> tailored to your desired tone and length.</p>
+
+            <p>Standing out on Instagram requires more than just great visuals; your caption drives engagement, tells a story, and encourages interactions. With our tool, you can generate <strong>free Instagram captions</strong> that feel human-written, include trending hashtags, and are sprinkled with relevant emojis. This boosts your post's appeal and increases the chances of appearing on the Explore page.</p>
+
+            <div class="faq">
+                <h2>Frequently Asked Questions</h2>
+                <div class="faq-item">
+                    <h3>What is an AI Instagram Caption Generator?</h3>
+                    <p>It's a smart tool that uses predefined templates and natural language patterns to create multiple caption options based on your description, chosen tone, and length. It mimics human creativity, saving you time and effort.</p>
+                </div>
+                <div class="faq-item">
+                    <h3>Is this tool completely free?</h3>
+                    <p>Yes, this AI caption generator is 100% free with no hidden costs, registration, or login required. You can generate unlimited captions directly in your browser.</p>
+                </div>
+                <div class="faq-item">
+                    <h3>Can I use these captions for Instagram Reels?</h3>
+                    <p>Absolutely! The captions are optimized for all Instagram formats: posts, stories, Reels, and IGTV. The viral and engaging nature works perfectly for short-form video content.</p>
+                </div>
+                <div class="faq-item">
+                    <h3>Does it work without login?</h3>
+                    <p>Yes, the tool is entirely frontend-based. No backend, no data storage, and no login. Your privacy is completely protected.</p>
+                </div>
+            </div>
+
+            <p>In today's competitive social media landscape, consistency and quality are key. This <strong>Instagram caption generator</strong> helps you maintain a steady flow of creative content. From <strong>funny Instagram captions</strong> to professional business quotes, the variety ensures your profile stays fresh and engaging. Start generating your perfect caption now and watch your engagement grow!</p>
+        </section>
+    </main>
+
+    <footer>
+        <p>© <span id="currentYear"></span> AI Instagram Caption Generator. All rights reserved. This is a frontend-only tool.</p>
+        <p style="margin-top: 10px; font-size: 0.8rem;">This tool uses templates and algorithms to generate captions. It does not store or share any user data.</p>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        // DOM Elements
+        const generateBtn = document.getElementById('generateBtn');
+        const postDescription = document.getElementById('postDescription');
+        const toneSelect = document.getElementById('tone');
+        const lengthSelect = document.getElementById('length');
+        const resultsSection = document.getElementById('resultsSection');
+        const captionsContainer = document.getElementById('captionsContainer');
+        const themeToggle = document.getElementById('themeToggle');
+        const currentYearSpan = document.getElementById('currentYear');
+
+        // Set current year in footer
+        currentYearSpan.textContent = new Date().getFullYear();
+
+        // Theme Toggle
+        themeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('dark-theme');
+            themeToggle.textContent = document.body.classList.contains('dark-theme') ? '☀️ Light' : '🌙 Dark';
+        });
+
+        // Caption generation logic - FIXED VERSION
+        const captionGenerators = {
+            funny: (desc) => [
+                `Living my best life, or at least trying to remember where I left it. 😂\n\nJust enjoying: ${desc}\n#Funny #Life #Instagram #Humor`,
+                `Proof that I do leave my house sometimes. 📸\n\nCapturing this moment: ${desc}\n#Hilarious #Reels #Fun #Comedy`,
+                `This is what peak performance looks like. (Spoiler: It's messy) 🎉\n\n${desc} - worth every laugh!\n#Laugh #DailyFun #Viral`,
+                `When life gives you ${desc.split(' ')[0]}, make memes! 😂\n\nAlways finding humor in everything!\n#FunnyPost #Memes #Instagram`,
+                `My face when ${desc.toLowerCase()}... 😅\n\nCan you relate?\n#Funny #Relatable #Trending`
+            ],
+            motivational: (desc) => [
+                `The only limit is the one you set yourself. Go break it. 💪\n\n${desc} - this is just the beginning!\n#Motivation #Success #Inspiration`,
+                `Small steps every day lead to big results. Keep pushing! 🔥\n\n${desc} - progress, not perfection.\n#Goals #Hustle #Win`,
+                `Your future self will thank you for starting today. ✨\n\n${desc}\n#Inspire #DreamBig #Achieve #Growth`,
+                `Rise up, grind, repeat. 📈\n\n${desc} - dedication pays off!\n#MotivationalQuote #SuccessMindset`,
+                `Turn your ${desc.split(' ')[0]} into fuel for success! 🚀\n\nNever stop growing!\n#MotivationDaily #Achievement`
+            ],
+            romantic: (desc) => [
+                `In your smile, I find the sunshine that lights up my world. ❤️🌞\n\n${desc}\n#Love #Romance #CoupleGoals`,
+                `Every moment with you feels like a beautiful dream. 🌙✨\n\n${desc}\n#TogetherForever #Soulmate #LoveStory`,
+                `You are my favorite hello and my hardest goodbye. 💕\n\n${desc}\n#LoveYou #Relationship #Romantic`,
+                `My heart beats for moments like ${desc.toLowerCase()}. 💓\n\nForever grateful for you.\n#Love #Blessed #Partner`,
+                `With you, every ${desc.split(' ')[0]} feels magical. ✨\n\nTrue love stories never end.\n#RomanticQuote #LoveLife`
+            ],
+            professional: (desc) => [
+                `Delivering excellence, one project at a time. 👔\n\n${desc}\n#Professional #Career #Business`,
+                `Innovation meets dedication. Proud of the team! 🚀\n\n${desc}\n#Work #Success #Leadership`,
+                `Networking, growing, and achieving milestones. 📈\n\n${desc}\n#Corporate #Entrepreneur #Growth`,
+                `Strategizing success through ${desc.toLowerCase()}. 🎯\n\nProfessional growth in action.\n#Business #Strategy #Success`,
+                `Building bridges, not walls. 🌉\n\n${desc}\n#ProfessionalDevelopment #Networking`
+            ],
+            attitude: (desc) => [
+                `I don't follow trends, I set them. 😎\n\n${desc} - my way.\n#Attitude #Confident #Boss`,
+                `My vibe attracts my tribe. Period. ✌️\n\n${desc}\n#Cool #Independent #Swag`,
+                `Not everyone's cup of tea, and that's perfectly fine. 🍵\n\n${desc}\n#SelfLove #Unique #Fearless`,
+                `Watch me ${desc.split(' ')[0]} with style and attitude. 😏\n\nLiving unapologetically.\n#Attitude #Confidence`,
+                `I didn't come this far to only come this far. 💫\n\n${desc} - next level attitude!\n#BossMindset #Attitude`
+            ],
+            viral: (desc) => [
+                `This stopped me in my tracks. 🤯\n\n${desc}\n\nDouble tap if it grabs you too! 👇\n#Viral #Trending #Reels #Explore #FYP`,
+                `POV: You just found your new favorite account. 😉\n\n${desc}\n\nFollow for more! 🔥\n#Instagram #ViralPost #MustSee #Trending`,
+                `Tag someone who needs to see this! 🏷️\n\n${desc}\n\nShare to your story! 📲\n#Trend #Challenge #SocialMedia #Viral`,
+                `Wait for it... ⏳\n\n${desc}\n\nThis is going viral! 🌟\n#ViralContent #Reels #ExplorePage`,
+                `You won't believe this! 🤩\n\n${desc}\n\nSave & share! 💾\n#Viral #Trending #MustWatch`
+            ],
+            business: (desc) => [
+                `Turning ideas into income. 💰\n\n${desc}\n#Business #Entrepreneur #Startup`,
+                `Your brand is what people say about you when you're not in the room. 🏢\n\n${desc}\n#Marketing #Branding #Success`,
+                `Revenue is vanity, profit is sanity. 📊\n\n${desc}\n#Finance #SmallBusiness #Growth`,
+                `Scaling through ${desc.toLowerCase()}. 📈\n\nBusiness growth unlocked.\n#Entrepreneurship #Success`,
+                `Innovating the future of ${desc.split(' ')[0]}. 🚀\n\nBusiness excellence in action.\n#BusinessTips #GrowthHacking`
+            ]
+        };
+
+        // Length modifiers - FIXED
+        const lengthModifiers = {
+            short: (caption) => {
+                const lines = caption.split('\n');
+                return lines[0]; // Just the first line
+            },
+            medium: (caption) => caption, // Keep as is
+            long: (caption) => {
+                const base = caption.split('\n')[0];
+                const additional = [
+                    "\n\nSometimes the longest journeys bring the greatest rewards. Never underestimate the power of consistency and passion in everything you do. Let's keep shining! 🌟",
+                    "\n\nLife is about creating moments that take your breath away. Cherish every second, learn from every experience, and grow with every challenge. The best is yet to come! ✨",
+                    "\n\nGreat things never come from comfort zones. Push yourself, believe in your journey, and trust the process. Every step forward is progress worth celebrating! 🏆",
+                    "\n\nSuccess isn't just about the destination, but the journey and the lessons learned along the way. Keep pushing boundaries and inspiring others! 💫",
+                    "\n\nIn a world where you can be anything, be kind, be bold, be authentically you. Your unique story is worth sharing with the world! 📖"
+                ];
+                return base + additional[Math.floor(Math.random() * additional.length)] + caption.split('\n').slice(-2).join('\n');
+            }
+        };
+
+        // Generate captions function - FIXED
+        function generateCaptions() {
+            const description = postDescription.value.trim();
+            const tone = toneSelect.value;
+            const length = lengthSelect.value;
+
+            // Clear previous results
+            captionsContainer.innerHTML = '';
+            resultsSection.style.display = 'none';
+
+            // Check for input
+            if (!description) {
+                alert("Please describe your post for better captions!");
+                postDescription.focus();
+                return;
+            }
+
+            // Show loading state
+            resultsSection.style.display = 'block';
+            captionsContainer.innerHTML = '<div class="loading">Generating your perfect captions... ✨</div>';
+
+            // Use setTimeout to simulate processing and ensure smooth animation
+            setTimeout(() => {
+                captionsContainer.innerHTML = '';
+                
+                // Get captions for selected tone
+                const captions = captionGenerators[tone](description);
+                
+                // Display 5 captions
+                for (let i = 0; i < 5; i++) {
+                    let caption = captions[i % captions.length];
+                    
+                    // Apply length modifier
+                    caption = lengthModifiers[length](caption);
+                    
+                    // Create card
+                    const card = document.createElement('div');
+                    card.className = 'caption-card';
+                    card.style.animationDelay = `${i * 0.1}s`;
+
+                    const captionText = document.createElement('div');
+                    captionText.className = 'caption-text';
+                    captionText.textContent = caption;
+
+                    const copyBtn = document.createElement('button');
+                    copyBtn.className = 'btn-copy';
+                    copyBtn.innerHTML = '📋 Copy Caption';
+                    copyBtn.addEventListener('click', () => {
+                        navigator.clipboard.writeText(caption).then(() => {
+                            copyBtn.textContent = '✅ Copied!';
+                            copyBtn.classList.add('copied');
+                            setTimeout(() => {
+                                copyBtn.textContent = '📋 Copy Caption';
+                                copyBtn.classList.remove('copied');
+                            }, 2000);
+                        });
+                    });
+
+                    card.appendChild(captionText);
+                    card.appendChild(copyBtn);
+                    captionsContainer.appendChild(card);
+                }
+
+                // Scroll to results
+                setTimeout(() => {
+                    window.scrollTo({
+                        top: resultsSection.offsetTop - 100,
+                        behavior: 'smooth'
+                    });
+                }, 300);
+                
+            }, 500); // Small delay for better UX
+        }
+
+        // Event Listeners
+        generateBtn.addEventListener('click', generateCaptions);
+
+        // Allow Enter key to generate (with Ctrl/Cmd)
+        postDescription.addEventListener('keydown', (e) => {
+            if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+                generateCaptions();
+            }
+        });
+
+        // Generate captions on page load with example
+        window.addEventListener('DOMContentLoaded', () => {
+            setTimeout(generateCaptions, 300);
+        });
+
+        // Initialize with a dark theme preference if user prefers
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.body.classList.add('dark-theme');
+            themeToggle.textContent = '☀️ Light';
+        }
+    </script>
+</body>
+</html>
